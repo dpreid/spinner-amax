@@ -97,9 +97,8 @@
 <script>
 
 import Clock from "./Clock.vue";
-//import Checklist from './Checklist.vue';
 import Achievements from './Achievements.vue';
-//import Logging from './Logging.vue';
+
 import { mapGetters } from 'vuex';
 
 
@@ -108,9 +107,7 @@ export default {
   name: 'NavigationBar',
   components: {
     Clock,
-    //Checklist,
     Achievements,
-    //Logging,
   },
   props:{
       

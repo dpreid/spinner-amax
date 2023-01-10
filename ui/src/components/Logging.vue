@@ -59,15 +59,6 @@ export default {
     computed:{
         ...mapGetters([
             'getLogURLObtained',
-            'getLogStart',
-            //'getLogClicks',
-            //'getLogParameters',
-            'getLogTotalTime',
-            'getPromptByName',
-            'getPrompts',
-            'getAchievementByName',
-            'getLogConsent',
-            'getSurveyConsent',
             'getSessionExpired',
             
         ]),
@@ -78,7 +69,6 @@ export default {
             'logClick',
             'logStart',
             'logEnd',
-            'triggerIntent'
         ]),
         initialLogging(){
             this.logStart({log:'start', data: Date.now()});
