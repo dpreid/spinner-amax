@@ -1,5 +1,7 @@
 # spinner-amax
 
+This branch contains the full version of the UI that was used with CIE3 2021-22. This contains logging, achievements and survey prompts. Unlikely to be useful in any other context. For the basic version of the working remote lab UI (without any additional logging etc) see the core branch.
+
 Spinner experiment with Maxxon AMAX 32 motor, upgraded for 2022 usage by Controls and Instrumentation 3, School of Engineering, University of Edinburgh. This design has now been used for over 2,500 hours in total across 12 separate instances. It is based on the [spinner-nidec](https://github.com/practable/spinner-nidec).
 
 <figure>
