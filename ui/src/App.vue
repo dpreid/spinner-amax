@@ -180,7 +180,6 @@ export default {
       window.addEventListener('beforeunload', () => {this.saveDataToLocalStorage()});			//refreshing page, changing URL
 
       this.loadAchievements();  //load the already achieved achievements.
-      this.loadPrompts();
       this.loadLogging();
       
 
@@ -403,15 +402,6 @@ export default {
           this.$store.dispatch('loadAchievements', data);
         }
       },
-      loadPrompts(){
-        if(this.getUsesLocalStorage && window.localStorage.getItem('promptsSpinningDisk')){
-          let data = window.localStorage.getItem('promptsSpinningDisk');
-          data = JSON.parse(data);
-          this.$store.dispatch('loadPrompts', data);
-        } else{
-          this.$store.dispatch('setPromptsLoaded');
-        }
-      },
       loadLogging(){
         if(this.getUsesLocalStorage && window.localStorage.getItem('loggingSpinningDisk')){
           let data = window.localStorage.getItem('loggingSpinningDisk');
@@ -425,7 +415,6 @@ export default {
             this.saveData();
             this.saveLogging();
             this.saveAchievements();
-            this.savePrompts();
 
             return true;
             
@@ -451,15 +440,6 @@ export default {
         let data_json = JSON.stringify(this.$store.getters.getAchievements);
         window.localStorage.setItem('achievementsSpinningDisk', data_json);
       },
-      savePrompts(){
-        let prompts = this.$store.getters.getPrompts;
-        prompts.forEach(prompt => {
-          prompt.completed = false;
-        })
-        let data_json = JSON.stringify(prompts);
-
-        window.localStorage.setItem('promptsSpinningDisk', data_json);
-      },
       //need to check on App mount that a UUID exists already or create a new one - this UUID is used in logging and rasa conversations
       updateUUID(){
         let stored_uuid;
@@ -482,22 +462,18 @@ export default {
       },
       checkConsent(){
         let logging_consent;
-        let survey_consent;
         if(this.getUsesLocalStorage){
           logging_consent = window.localStorage.getItem('remote-lab-logging-consent');
-          survey_consent = window.localStorage.getItem('remote-lab-survey-consent');
         } else {
           logging_consent = null;
-          survey_consent = null;
         }
         
-        if(logging_consent == null || survey_consent == null){
+        if(logging_consent == null){
           this.showConsentModal = true;
           
         } else{
           this.showConsentModal = false;
           this.$store.dispatch('setLoggingConsent', (logging_consent === 'true'));
-          this.$store.dispatch('setSurveyConsent', (survey_consent === 'true'));
         }
         
       },

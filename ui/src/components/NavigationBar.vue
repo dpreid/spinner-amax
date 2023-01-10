@@ -58,14 +58,6 @@
                   </a>
                   <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdown2">
                     <li><a class="dropdown-item" id='toggleconsentbutton' href="#" @click='this.$emit("toggleconsent")'>Change consent</a></li>
-                    <!-- <li><a class="dropdown-item" id='clearsessiontime' href="#" @click='this.$store.dispatch("clearLoggedTime")'>Clear Logged time</a></li>
-                    <li><a class="dropdown-item" id='setloggedtime30' href="#" @click='this.$store.dispatch("setTotalTime", 1800001)'>Set time 30min</a></li>
-                    <li><a class="dropdown-item" id='setloggedtime60' href="#" @click='this.$store.dispatch("setTotalTime", 3600001)'>Set time 60min</a></li>
-                    <li><a class="dropdown-item" id='setloggedtime90' href="#" @click='this.$store.dispatch("setTotalTime", 5400001)'>Set time 90min</a></li>
-                    <li><a class="dropdown-item" id='setloggedtime120' href="#" @click='this.$store.dispatch("setTotalTime", 7200001)'>Set time 120min</a></li>
-                    <li><a class="dropdown-item" id='setloggedtime180' href="#" @click='this.$store.dispatch("setTotalTime", 10800001)'>Set time 180min</a></li>
-                    <li><a class="dropdown-item" id='clearprompts' href="#" @click='this.$store.dispatch("clearCompletedPrompts")'>Clear Prompts</a></li>
-                    <li><a class="dropdown-item" id='clearachievements' href="#" @click='this.$store.dispatch("clearCompletedAchievements")'>Clear Achievements</a></li> -->
                   </ul>
               </li>
 
@@ -80,11 +72,9 @@
           <div class='d-flex'>
               <ul class="navbar-nav dropstart">
                   
-                  <prompts id='prompts' v-if='getSurveyConsent && getIsPromptsAvailable'/>
-                  <!-- <rasa-bot id='rasabot' v-if='getIsChatbotAvailable' /> -->
-                  <!-- <logging /> -->
+                  
                   <achievements id='achievements' v-if='getIsAchievementsAvailable' />
-                  <!-- <checklist /> -->
+                  
 
                   <li class="nav-item">
                     <clock class='nav-link' />
@@ -110,8 +100,6 @@ import Clock from "./Clock.vue";
 //import Checklist from './Checklist.vue';
 import Achievements from './Achievements.vue';
 //import Logging from './Logging.vue';
-import Prompts from './Prompts.vue';
-//import RasaBot from './RasaBot.vue';
 import { mapGetters } from 'vuex';
 
 
@@ -123,8 +111,6 @@ export default {
     //Checklist,
     Achievements,
     //Logging,
-    Prompts,
-    //RasaBot,
   },
   props:{
       
@@ -139,11 +125,7 @@ export default {
   },
   computed:{
     ...mapGetters([
-      'getIsChatbotAvailable',
       'getIsAchievementsAvailable',
-      'getSurveyConsent',
-      'getPromptByName',
-      'getIsPromptsAvailable'
     ]),
       labName(){
         let lab = this.$store.getters.getRemoteLabVersion;
@@ -161,19 +143,10 @@ export default {
           this.toggleComponent('workspace');
           setTimeout(() => {this.$emit('add' + tool)}, 100);  //give the workspace time to initialise and then send tool event
 
-          // if(tool == 'ruler'){
-          //   if(this.$store.getters.getPromptByName('inertia_check').count < 1){
-          //     this.$store.dispatch('showPrompt', 'inertia_check');
-          //   }
-          // }
       },
       toggleComponent(component){
           this.$emit('toggle' + component);
 
-          //prompt chatbot to ask about useful components
-          if((this.getPromptByName('useful_component').count == 0 && this.$store.getters.getLogTotalTime > 1800000) || (this.getPromptByName('useful_component').count == 1 && this.$store.getters.getLogTotalTime > 3600000)){
-            this.$store.dispatch('showPrompt', 'useful_component');
-          }
       },
       clearWorkspace(){
           this.$emit('clearworkspace');
