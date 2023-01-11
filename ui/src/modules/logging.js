@@ -11,6 +11,7 @@ const loggingStore = {
     state: () => ({
         logSocket: null,
         uuid: '',
+        isLoggingOn: true,                  //set for difference UI versions
         logging_consent_given: false,
         hardware: 'spinner',
         course: 'engdes1',
@@ -170,6 +171,9 @@ const loggingStore = {
             getLogEnd(state){
                 return state.session_time.end;
             },
+            getIsLoggingOn(state){
+                return state.isLoggingOn;
+            }
             
           
          

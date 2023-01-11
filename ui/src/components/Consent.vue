@@ -56,7 +56,7 @@ import { mapGetters } from 'vuex';
 export default {
 
   name: 'Consent',
-  emits:['consentSet'],
+  emits:['consentset'],
   data () {
     return {
         logging: false,
@@ -67,7 +67,9 @@ export default {
   },
   computed:{
      ...mapGetters([
-         'getUsesLocalStorage'
+         'getUsesLocalStorage',
+         'getCourse',
+         'getHardware'
      ])
   },
   watch:{
@@ -84,11 +86,14 @@ export default {
       consent(){
           this.$store.dispatch('setLoggingConsent', this.logging);
           if(this.getUsesLocalStorage){
-              window.localStorage.setItem('remote-lab-logging-consent', this.logging);
+            let course = this.getCourse;
+            let exp = this.getHardware;
+            const item = `consent-${exp}-${course}`
+              window.localStorage.setItem(item, this.logging);
           }
           
 
-          this.$emit('consentSet');
+          this.$emit('consentset');
           
       }
       

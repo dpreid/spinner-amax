@@ -52,7 +52,7 @@
                   </ul>
               </li>
 
-              <li class="nav-item dropdown">
+              <li v-if='getIsLoggingOn' class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" id="settingsdropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                    Settings
                   </a>
@@ -123,6 +123,7 @@ export default {
   computed:{
     ...mapGetters([
       'getIsAchievementsAvailable',
+      'getIsLoggingOn'
     ]),
       labName(){
         let lab = this.$store.getters.getRemoteLabVersion;

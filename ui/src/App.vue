@@ -9,7 +9,7 @@
                     @togglesystemdiagrams="toggleSystemDiagrams" @clearworkspace="clearWorkspace" @addruler="rulerAdded = true" @addprotractor="protractorAdded = true"
                     />
 
-      <consent v-if='showConsentModal' @consentSet="closeConsentModal"/>
+      <consent v-if='showConsentModal && getIsLoggingOn' @consentset="closeConsentModal"/>
       <help v-if='showHelpModal' @togglehelp="showHelpModal = false" />
 
     <transition name='fade'>
@@ -187,7 +187,10 @@ export default {
   computed:{
     ...mapGetters([
 			'getDraggable',
-      'getUsesLocalStorage'
+            'getUsesLocalStorage',
+            'getIsLoggingOn',
+            'getHardware',
+            'getCourse'
 		]),
     getDesktopWindow(){
       let window_width = window.innerWidth;
@@ -443,8 +446,11 @@ export default {
       //need to check on App mount that a UUID exists already or create a new one - this UUID is used in logging and rasa conversations
       updateUUID(){
         let stored_uuid;
+        let course = this.getCourse;
+        let exp = this.getHardware;
+        const item = `uuid-${exp}-${course}`
         if(this.getUsesLocalStorage){
-          stored_uuid = window.localStorage.getItem('remote-lab-uuid');
+          stored_uuid = window.localStorage.getItem(item);
         } else {
           stored_uuid = null;
         }
@@ -455,26 +461,34 @@ export default {
             let uuid = uuidv4();
             this.$store.dispatch('setUUID', uuid);
             if(this.getUsesLocalStorage){
-              window.localStorage.setItem('remote-lab-uuid', uuid);
+              window.localStorage.setItem(item, uuid);
             }
             
         }
       },
       checkConsent(){
         let logging_consent;
-        if(this.getUsesLocalStorage){
-          logging_consent = window.localStorage.getItem('remote-lab-logging-consent');
-        } else {
-          logging_consent = null;
+        if(this.getIsLoggingOn){
+            if(this.getUsesLocalStorage){
+                let course = this.getCourse;
+                let exp = this.getHardware;
+                const item = `consent-${exp}-${course}`
+                logging_consent = window.localStorage.getItem(item);
+            } else {
+                logging_consent = null;
+            }
+            
+            if(logging_consent == null){
+                this.showConsentModal = true;
+            
+            } else{
+                this.showConsentModal = false;
+                this.$store.dispatch('setLoggingConsent', (logging_consent === 'true'));
+            }
+        } else{
+            this.$store.dispatch('setLoggingConsent', false);
         }
         
-        if(logging_consent == null){
-          this.showConsentModal = true;
-          
-        } else{
-          this.showConsentModal = false;
-          this.$store.dispatch('setLoggingConsent', (logging_consent === 'true'));
-        }
         
       },
       closeConsentModal(){
