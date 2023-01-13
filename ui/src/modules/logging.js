@@ -13,7 +13,8 @@ const loggingStore = {
         uuid: '',
         isLoggingOn: true,                  //set for difference UI versions
         logging_consent_given: false,
-        hardware: 'spinner',
+        hardware: 'spin30',
+        exp: 'spinner',
         course: 'engdes1',
         
         session_time: {
@@ -44,7 +45,8 @@ const loggingStore = {
                     state.logSocket.send(JSON.stringify({
                         user: state.uuid,
                         t: Date.now(),          
-                        exp: state.hardware,   
+                        exp: state.exp,   
+                        hardware: state.hardware,
                         course: state.course,    
                         type: "log", 
                         payload: payload
@@ -59,7 +61,8 @@ const loggingStore = {
                     state.logSocket.send(JSON.stringify({
                         user: state.uuid,
                         t: Date.now(),          
-                        exp: state.hardware,   
+                        exp: state.exp,  
+                        hardware: state.hardware, 
                         course: state.course,    
                         type: "analytics", 
                         payload: payload
@@ -85,6 +88,9 @@ const loggingStore = {
                 state.session_time.end = 0;
                 state.session_time.total = 0;
             },
+            SET_EXPERIMENT(state, exp){
+                state.exp = exp;
+            },
             SET_HARDWARE(state, hardware){
                 state.hardware = hardware;
             },
@@ -103,6 +109,9 @@ const loggingStore = {
             },
             setUUID(context, uuid){
                 context.commit('SET_UUID', uuid);
+            },
+            setExperiment(context, exp){
+                context.commit('SET_EXPERIMENT', exp)
             },
             setHardware(context, hardware){
                 context.commit('SET_HARDWARE', hardware)
@@ -155,6 +164,9 @@ const loggingStore = {
             },
             getLogUUID(state){
                 return state.uuid;
+            },
+            getExperiment(state){
+                return state.exp;
             },
             getHardware(state){
                 return state.hardware;
