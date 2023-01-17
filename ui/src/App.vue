@@ -189,7 +189,7 @@ export default {
 			'getDraggable',
             'getUsesLocalStorage',
             'getIsLoggingOn',
-            'getHardware',
+            'getExperiment',
             'getCourse'
 		]),
     getDesktopWindow(){
@@ -447,7 +447,7 @@ export default {
       updateUUID(){
         let stored_uuid;
         let course = this.getCourse;
-        let exp = this.getHardware;
+        let exp = this.getExperiment;
         const item = `uuid-${exp}-${course}`
         if(this.getUsesLocalStorage){
           stored_uuid = window.localStorage.getItem(item);
@@ -471,7 +471,7 @@ export default {
         if(this.getIsLoggingOn){
             if(this.getUsesLocalStorage){
                 let course = this.getCourse;
-                let exp = this.getHardware;
+                let exp = this.getExperiment;
                 const item = `consent-${exp}-${course}`
                 logging_consent = window.localStorage.getItem(item);
             } else {

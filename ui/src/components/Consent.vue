@@ -69,7 +69,7 @@ export default {
      ...mapGetters([
          'getUsesLocalStorage',
          'getCourse',
-         'getHardware'
+         'getExperiment'
      ])
   },
   watch:{
@@ -87,7 +87,7 @@ export default {
           this.$store.dispatch('setLoggingConsent', this.logging);
           if(this.getUsesLocalStorage){
             let course = this.getCourse;
-            let exp = this.getHardware;
+            let exp = this.getExperiment;
             const item = `consent-${exp}-${course}`
               window.localStorage.setItem(item, this.logging);
           }
