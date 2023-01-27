@@ -13,9 +13,9 @@ const loggingStore = {
         uuid: '',
         isLoggingOn: true,                  //set for difference UI versions
         logging_consent_given: false,
-        hardware: 'spin30',
-        exp: 'spinner',
-        course: 'engdes1',
+        hardware: '',           //will be set from the LoggingStream.vue component 
+        exp: 'spinner',         //hardcoded for this UI
+        course: 'engdes1',      //defaults to engdes1, but will be set from Streams.vue from a url query param
         
         session_time: {
             start: Date.now(),      //will be updated
