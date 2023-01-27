@@ -10,6 +10,7 @@ const uiStore = {
        
        isAchievementsAvailable: false, // remove achievements from the UI
        usesLocalStorage: false,        //can only use localStorage if the browser allows it.
+       colour_index: 0,
 
        }),
        mutations:{
@@ -24,6 +25,9 @@ const uiStore = {
          },
          SET_USES_LOCAL_STORAGE(state, set){
             state.usesLocalStorage = set;
+         },
+         SET_COLOUR_INDEX(state, index){
+            state.colour_index = index
          },
          
 
@@ -40,6 +44,10 @@ const uiStore = {
          },
          setUsesLocalStorage(context, set){
             context.commit('SET_USES_LOCAL_STORAGE', set);
+         },
+         updateColourIndex(context){
+            let index = (context.state.colour_index + 1) % 6
+            context.commit('SET_COLOUR_INDEX', index);
          },
 
        },
@@ -58,6 +66,9 @@ const uiStore = {
          },
          getUsesLocalStorage(state){
             return state.usesLocalStorage;
+         },
+         getColourIndex(state){
+            return state.colour_index;
          },
          
        },  

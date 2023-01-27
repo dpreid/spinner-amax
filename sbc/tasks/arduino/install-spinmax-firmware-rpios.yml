@@ -3,6 +3,10 @@
     file:
       path: /home/pi/sources
       state: directory
+      
+  - name: Install flex to get necessary libraries for compiling firmware
+    apt:
+      name: flex
   
   - name: Get stats of the arduino-cli binary to check it exists 
     ansible.builtin.stat:

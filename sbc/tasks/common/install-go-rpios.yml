@@ -7,6 +7,6 @@
         
   - name: Download and extract golang
     ansible.builtin.unarchive:
-      src: https://golang.org/dl/go1.15.7.linux-armv6l.tar.gz
+      src: https://golang.org/dl/go1.19.5.linux-armv6l.tar.gz
       dest: /usr/local
       remote_src: yes 
