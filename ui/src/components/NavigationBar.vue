@@ -73,6 +73,12 @@
           <div class='d-flex'>
               <ul class="navbar-nav dropstart">
                   
+                <li class="nav-item">
+                  <a class="nav-link" >
+                    UUID: {{ getLogUUID }}
+                  </a>
+                  
+                </li>
                   
                   <achievements id='achievements' v-if='getIsAchievementsAvailable' />
                   
@@ -124,7 +130,8 @@ export default {
   computed:{
     ...mapGetters([
       'getIsAchievementsAvailable',
-      'getIsLoggingOn'
+      'getIsLoggingOn',
+      'getLogUUID'
     ]),
       labName(){
         let lab = this.$store.getters.getRemoteLabVersion;
