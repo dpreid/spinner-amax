@@ -419,7 +419,7 @@ export default {
             'getData',
             'getGraphDataParameter',
             'getNumData',
-            'getIsRecording',,
+            'getIsRecording',
             'getColourIndex'
         ]),
       },
