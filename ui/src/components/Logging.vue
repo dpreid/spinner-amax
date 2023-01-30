@@ -44,7 +44,7 @@ export default {
 				if(this.url != '' && this.getLogURLObtained){
 					this.connect();								
 				} else{
-					console.log('disconnecting: ' + this.url);
+					console.log('disconnecting logging websocket ');
 				}
 			} catch(e){
 				console.log(e);
