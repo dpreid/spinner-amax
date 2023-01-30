@@ -180,17 +180,17 @@ export default {
       window.addEventListener('beforeunload', () => {this.saveDataToLocalStorage()});			//refreshing page, changing URL
 
       this.loadAchievements();  //load the already achieved achievements.
-      this.loadLogging();
+      //this.loadLogging();
       
 
   },
   computed:{
     ...mapGetters([
 			'getDraggable',
-            'getUsesLocalStorage',
-            'getIsLoggingOn',
-            'getExperiment',
-            'getCourse'
+      'getUsesLocalStorage',
+      'getIsLoggingOn',
+      'getExperiment',
+      'getCourse'
 		]),
     getDesktopWindow(){
       let window_width = window.innerWidth;
@@ -405,18 +405,21 @@ export default {
           this.$store.dispatch('loadAchievements', data);
         }
       },
-      loadLogging(){
-        if(this.getUsesLocalStorage && window.localStorage.getItem('loggingSpinningDisk')){
-          let data = window.localStorage.getItem('loggingSpinningDisk');
-          let data_json = JSON.parse(data);
-          this.$store.dispatch('setTotalTime', data_json.time);
-        }
-      },
+      // loadLogging(){
+      //   if(this.getUsesLocalStorage && window.localStorage.getItem('loggingSpinningDisk')){
+      //     let data = window.localStorage.getItem('loggingSpinningDisk');
+      //     let data_json = JSON.parse(data);
+      //     this.$store.dispatch('setTotalTime', data_json.time);
+      //   }
+      // },
       saveDataToLocalStorage(){
-         if(this.getUsesLocalStorage && window.localStorage.getItem('remote-lab-uuid')){
+        let course = this.getCourse;
+        let exp = this.getExperiment;
+        const item = `uuid-${exp}-${course}`
+         if(this.getUsesLocalStorage && window.localStorage.getItem(item)){
             
             this.saveData();
-            this.saveLogging();
+            //this.saveLogging();
             this.saveAchievements();
 
             return true;
@@ -434,11 +437,11 @@ export default {
           window.localStorage.setItem('dateSavedSpinningDisk', date);
         }
       },
-      saveLogging(){
-        let data = {time: this.$store.getters.getLogTotalTime};
-        let data_json = JSON.stringify(data);
-        window.localStorage.setItem('loggingSpinningDisk', data_json);
-      },
+      // saveLogging(){
+      //   let data = {time: this.$store.getters.getLogTotalTime};
+      //   let data_json = JSON.stringify(data);
+      //   window.localStorage.setItem('loggingSpinningDisk', data_json);
+      // },
       saveAchievements(){
         let data_json = JSON.stringify(this.$store.getters.getAchievements);
         window.localStorage.setItem('achievementsSpinningDisk', data_json);
