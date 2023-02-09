@@ -55,17 +55,11 @@ export default {
                 this.logEnd({log:'end', type:'session-exp', data: Date.now()});
             }
         },
-        getHardware(hardware){
-            if(hardware != ''){
-                this.initialLogging();
-            }
-        }
     },
     computed:{
         ...mapGetters([
             'getLogURLObtained',
-            'getSessionExpired',
-            'getHardware'
+            'getSessionExpired'
             
         ]),
 
@@ -97,10 +91,10 @@ export default {
             //this.logSocket = new WebSocket('ws://127.0.0.1:8000');  //TESTING
 			_store.dispatch('setLogSocket', this.logSocket);
             
-            // this.logSocket.onopen = () => {
-			// 	//console.log('log connection opened at ', this.url);
-            //     this.initialLogging();
-			// };
+            this.logSocket.onopen = () => {
+				//console.log('log connection opened at ', this.url);
+                this.initialLogging();
+			};
         }
     }
 }
