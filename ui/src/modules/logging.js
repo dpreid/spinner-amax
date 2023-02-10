@@ -140,13 +140,16 @@ const loggingStore = {
                 // context.commit('UPDATE_SESSION_TIME', payload.data);
                 context.commit('LOG', payload);
             },
-            logComponent(context, payload){
+            async logComponent(context, payload){
+                await helpers.delay(100);
                 context.commit('LOG', payload);
             },
-            logParameters(context, payload){
+            async logParameters(context, payload){
+                await helpers.delay(100);
                 context.commit('LOG_ANALYTICS', payload);
             },
-            logAchievements(context, achievements){
+            async logAchievements(context, achievements){
+                await helpers.delay(100);
                 context.commit('LOG', {log:'achievements', data: achievements});
             },
             // clearLoggedTime(context){
@@ -191,6 +194,12 @@ const loggingStore = {
          
        },  
   
+  }
+
+  let helpers = {
+    delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    },
   }
 
   export default loggingStore;
