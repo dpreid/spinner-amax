@@ -5,21 +5,47 @@ const achievementStore = {
     state: () => ({
         achievements: [
             {name:'custom-ui', verbose:'Customise the UI', completed: false, hidden: true},
+
             {name:'speedRaw-step-input', verbose:'Step input whilst in open loop mode', completed: false, hidden: false},
-            {name:'speedRaw-ramp-input', verbose:'Ramp input whilst in open loop mode', completed: false, hidden: false},
-            {name:'positionPid-step-input', verbose:'Step input whilst in position PID mode', completed: false, hidden: false},
-            {name:'positionPid-ramp-input', verbose:'Ramp input whilst in position PID mode', completed: false, hidden: false},
-            {name:'speedPid-step-input', verbose:'Step input whilst in speed PID mode', completed: false, hidden: false},
-            {name:'speedPid-ramp-input', verbose:'Ramp input whilst in speed PID mode', completed: false, hidden: false},
+
+            {name:'step-inputs', verbose:'Run a step input in each mode', completed: false, hidden: true, fractional: [
+                {name:'voltage-step', completed: false},
+                {name:'position-step', completed: false},
+                {name:'speed-step', completed: false},
+
+            ], required: 3, n: 0}, 
+
+            {name:'ramp-inputs', verbose:'Run a ramp input in each mode', completed: false, hidden: true, fractional: [
+                {name:'voltage-ramp', completed: false},
+                {name:'position-ramp', completed: false},
+                {name:'speed-ramp', completed: false},
+
+            ], required: 3, n: 0}, 
 
             {name:'p-controller', verbose:'Used a non-unity proportional controller in position, step mode', completed: false, hidden: false},
-            {name:'pd-controller', verbose:'Used a PD controller in position, step mode', completed: false, hidden: true},
-            {name:'pid-controller', verbose:'Used a full PID controller in position, step mode', completed: false, hidden: true},
+
+            {name:'all-controllers', verbose:'Run four controller types in position mode', completed: false, hidden: true, fractional: [
+                {name:'p-controller', completed: false},
+                {name:'pi-controller', completed: false},
+                {name:'pd-controller', completed: false},
+                {name:'pid-controller', completed: false},
+
+            ], required: 4, n: 0}, 
 
             {name:'download-data', verbose:'Downloaded a dataset with n > 100 data points', completed: false, hidden: false},
-            {name:'plot-linear', verbose:'Plot linear function', completed: false, hidden: false},
-            {name:'plot-1st-step', verbose:'Plot 1st order step function', completed: false, hidden: true},
-            {name:'plot-2nd-step', verbose:'Plot 2nd order step function', completed: false, hidden: true},
+
+            {name:'plot-functions', verbose:'Plot 3 different functions', completed: false, hidden: true, fractional: [
+                {name:'plot-linear', completed: false},
+                {name:'plot-1st-step', completed: false},
+                {name:'plot-2nd-step', completed: false},
+                {name:'plot-trig', completed: false},
+                {name:'plot-exp', completed: false},
+                {name:'plot-quadratic', completed: false},
+                {name:'plot-ramp', completed: false},
+
+            ], required: 3, n: 0}, 
+            
+            
 
             {name:'open-all', verbose:'Opened all the components', completed: false, hidden: true, fractional: [
                 {name:'graph', completed: false},
@@ -118,14 +144,20 @@ const achievementStore = {
              if(context.getters.getAchievementsUncompleted.includes(name)){
                 context.commit('SET_ACHIEVEMENT_COMPLETED', name);
                 context.commit('SET_ACHIEVEMENT_UPDATE', true);
-
+                
                 context.dispatch('logAchievements', context.state.achievements, {root: true});        //log the achievements everytime an achievement is completed
              }
          },
          setFractionalAchievementCompleted(context, achievement){
             if(context.getters.getAchievementsUncompleted.includes(achievement.name)){
+                let n_previous = context.getters.getAchievementByName(achievement.name).n
                 context.commit('SET_FRACTIONAL_ACHIEVEMENT_COMPLETED', achievement);
-                context.commit('SET_ACHIEVEMENT_UPDATE', true);     //although perhaps not completed, should show some kind of update to progress.
+                let n_current = context.getters.getAchievementByName(achievement.name).n
+                let required = context.getters.getAchievementByName(achievement.name).required
+                if(n_current > n_previous && n_current <= required){
+                    context.commit('SET_ACHIEVEMENT_UPDATE', true);
+                }
+
             }
          },
          addMultipleAchievement(context, name){
@@ -141,10 +173,16 @@ const achievementStore = {
             
            if(context.rootState.data.p != 1 && context.rootState.data.i == 0 && context.rootState.data.d == 0){
                context.dispatch('setAchievementCompleted', 'p-controller');
-           } else if(context.rootState.data.p > 0 && context.rootState.data.i == 0 && context.rootState.data.d > 0){
-               context.dispatch('setAchievementCompleted', 'pd-controller');
-           } else if(context.rootState.data.p > 0 && context.rootState.data.i > 0 && context.rootState.data.d > 0){
-               context.dispatch('setAchievementCompleted', 'pid-controller');
+               context.dispatch('setFractionalAchievementCompleted', {name:'all-controllers', fractional:'p-controller'});
+           } 
+           else if(context.rootState.data.p > 0 && context.rootState.data.i > 0 && context.rootState.data.d == 0){
+               context.dispatch('setFractionalAchievementCompleted', {name:'all-controllers', fractional:'pi-controller'});
+           } 
+           else if(context.rootState.data.p > 0 && context.rootState.data.i == 0 && context.rootState.data.d > 0){
+                context.dispatch('setFractionalAchievementCompleted', {name:'all-controllers', fractional:'pd-controller'});
+            } 
+           else if(context.rootState.data.p > 0 && context.rootState.data.i > 0 && context.rootState.data.d > 0){
+               context.dispatch('setFractionalAchievementCompleted', {name:'all-controllers', fractional:'pid-controller'});
            } 
         },
         clearCompletedAchievements(context){

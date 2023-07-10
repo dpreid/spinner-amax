@@ -8,21 +8,21 @@
                 <div class='input-group' v-if='mode == "speedRaw"'>
                     <span class='input-group-text' for="ramp_gradient"><b>Ramp gradient (Vs<sup>-1</sup>)</b></span>
                     <input type="number" :max='max_voltage_ramp' :min='-max_voltage_ramp' :class="(parseFloat(ramp_gradient) >= -max_voltage_ramp && parseFloat(ramp_gradient) <= max_voltage_ramp) ? 'form-control' : 'form-control is-invalid'" id="ramp_gradient" v-model="ramp_gradient">
-                    <button class='btn btn-lg' id="run" v-if='!getIsRampRunning' @click="runRamp">Run</button>
+                    <button class='btn btn-lg' id="run" v-if='!getIsRampRunning' @click="runRamp(); checkVoltageAchievements()">Run</button>
                     <button class='btn btn-lg btn-danger' v-else id="stop" @click="stopRamp">Stop</button>
                 </div>
 
                 <div class='input-group' v-else-if='mode == "speedPid"'>
                     <span class='input-group-text' for="ramp_gradient"><b>Ramp gradient (rads<sup>-2</sup>)</b></span>
                      <input type="number" :max='max_speed_ramp' :min='-max_speed_ramp' :class="(parseFloat(ramp_gradient) >= -max_speed_ramp && parseFloat(ramp_gradient) <= max_speed_ramp) ? 'form-control' : 'form-control is-invalid'" id="ramp_gradient" v-model="ramp_gradient">
-                     <button class='btn btn-lg' id="run" v-if='!getIsRampRunning' @click="runRamp">Run</button>
+                     <button class='btn btn-lg' id="run" v-if='!getIsRampRunning' @click="runRamp(); checkSpeedAchievements()">Run</button>
                      <button class='btn btn-lg btn-danger' v-else id="stop" @click="stopRamp">Stop</button>
                 </div>
 
                 <div class='input-group' v-else-if='mode == "positionPid"'>
                     <span class='input-group-text' for="ramp_gradient"><b>Ramp gradient (rads<sup>-1</sup>)</b></span>
                     <input type="number" :max='max_position_ramp' :min='-max_position_ramp' :class="(parseFloat(ramp_gradient) >= -max_position_ramp && parseFloat(ramp_gradient) <= max_position_ramp) ? 'form-control' : 'form-control is-invalid'" id="ramp_gradient" v-model="ramp_gradient">
-                    <button class='btn btn-lg' id="run" v-if='!getIsRampRunning' @click="runRamp(); this.$store.dispatch('setAchievementCompleted', 'positionPid-ramp-input')">Run</button>
+                    <button class='btn btn-lg' id="run" v-if='!getIsRampRunning' @click="runRamp(); checkPositionAchievements()">Run</button>
                     <button class='btn btn-lg btn-danger' v-else id="stop" @click="stopRamp">Stop</button>
                 </div>
 
@@ -117,7 +117,18 @@ export default {
                 this.$store.dispatch('wait');
             }
         
-    }
+    },
+    checkVoltageAchievements(){
+            this.$store.dispatch('setFractionalAchievementCompleted', {name:'ramp-inputs', fractional:'voltage-ramp'});
+
+        },
+        checkSpeedAchievements(){
+            this.$store.dispatch('setFractionalAchievementCompleted', {name:'ramp-inputs', fractional:'speed-ramp'});
+            
+        },
+        checkPositionAchievements(){
+            this.$store.dispatch('setFractionalAchievementCompleted', {name:'ramp-inputs', fractional:'position-ramp'});
+        },
   }
 }
 </script>

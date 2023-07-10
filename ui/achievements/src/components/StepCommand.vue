@@ -7,7 +7,7 @@
                 <div class='input-group' v-if='mode == "speedRaw"'>
                     <span class='input-group-text' for="step_raw">Step size ({{-max_voltage_step}} to {{max_voltage_step}}V)</span>
                     <input type="number" :max='max_voltage_step' :min='-max_voltage_step' :class="(parseFloat(step_size) >= -max_voltage_step && parseFloat(step_size) <= max_voltage_step) ? 'form-control' : 'form-control is-invalid'" id="step_raw" v-model="step_size">
-                    <button class='btn btn-lg' id="run" @click="runStep(); this.$store.dispatch('setAchievementCompleted', 'speedRaw-step-input')" :disabled='Math.abs(step_size) > max_voltage_step'>Run</button>
+                    <button class='btn btn-lg' id="run" @click="runStep(); checkVoltageAchievements()" :disabled='Math.abs(step_size) > max_voltage_step'>Run</button>
                     <button class='btn btn-lg btn-danger' v-if='getIsStepRunning' id="wait" @click="stopStep">Stop</button>
                 </div>
             
@@ -15,14 +15,14 @@
                 <div class='input-group' v-else-if='mode == "speedPid"'>
                     <span class='input-group-text' for="step_speed">Step size (0 - {{max_speed_step}} rad/s)</span>
                     <input type="number" :max='max_speed_step' :min='-max_speed_step' :class="(parseFloat(step_size) >= -max_speed_step && parseFloat(step_size) <= max_speed_step) ? 'form-control' : 'form-control is-invalid'" id="step_speed" v-model="step_size">
-                    <button class='btn btn-lg' id="run" @click="runStep" :disabled='Math.abs(step_size) > max_speed_step'>Run</button>
+                    <button class='btn btn-lg' id="run" @click="runStep(); checkSpeedAchievements()" :disabled='Math.abs(step_size) > max_speed_step'>Run</button>
                     <button class='btn btn-lg btn-danger' v-if='getIsStepRunning' id="wait" @click="stopStep">Stop</button>
                 </div>
 
                 <div class='input-group' v-else-if='mode == "positionPid"'>
                     <span class='input-group-text' for="step_speed">Step size (0 - {{max_position_step.toFixed(2)}} rad)</span>
                     <input type="number" step='0.01' :max='max_position_step.toFixed(2)' :min='-max_position_step.toFixed(2)' :class="(parseFloat(step_size) >= -max_position_step && parseFloat(step_size) <= max_position_step) ? 'form-control' : 'form-control is-invalid'" id="step_position" v-model="step_size" >
-                    <button class='btn btn-lg' v-if='!getIsStepRunning' id="run" @click="runStep(); this.$store.dispatch('checkPIDControllerConditions')">Run</button>
+                    <button class='btn btn-lg' v-if='!getIsStepRunning' id="run" @click="runStep(); checkPositionAchievements()">Run</button>
                     <button class='btn btn-lg btn-danger' v-else-if='getIsStepRunning' id="wait" @click="stopStep">Stop</button>
                 </div>
 
@@ -136,6 +136,19 @@ export default {
             }
              
 		},
+        checkVoltageAchievements(){
+            this.$store.dispatch('setAchievementCompleted', 'speedRaw-step-input');
+            this.$store.dispatch('setFractionalAchievementCompleted', {name:'step-inputs', fractional:'voltage-step'});
+
+        },
+        checkSpeedAchievements(){
+            this.$store.dispatch('setFractionalAchievementCompleted', {name:'step-inputs', fractional:'speed-step'});
+            
+        },
+        checkPositionAchievements(){
+            this.$store.dispatch('checkPIDControllerConditions');
+            this.$store.dispatch('setFractionalAchievementCompleted', {name:'step-inputs', fractional:'position-step'});
+        },
      
   }
 }

@@ -62,7 +62,7 @@
                        
 
                     <div class="row-sm justify-content-center">
-                        <button class="btn btn-success btn-xs m-1" id="plotFunctionButton" @click="plotFunc(linear); (this.func_a != 0 || this.func_b != 0) ? this.$store.dispatch('setAchievementCompleted', 'plot-linear'):''">Plot</button>
+                        <button class="btn btn-success btn-xs m-1" id="plotFunctionButton" @click="plotFunc(linear); (this.func_a != 0 || this.func_b != 0) ? plottingAchievement('plot-linear'):''">Plot</button>
                         <button class="btn btn-danger btn-xs m-1" id="clearFunctionButton" @click="deleteFunctionDataset">Clear</button>
                     </div>
                 </div>
@@ -94,7 +94,7 @@
                     </div>
 
                     <div class="row-sm justify-content-center">
-                        <button class="btn btn-success btn-xs m-1" id="plotFunctionButton" @click="plotFunc(quadratic)">Plot</button>
+                        <button class="btn btn-success btn-xs m-1" id="plotFunctionButton" @click="plotFunc(quadratic); (this.func_a != 0 || this.func_b != 0) ? plottingAchievement('plot-quadratic'):''">Plot</button>
                         <button class="btn btn-danger btn-xs m-1" id="clearFunctionButton" @click="deleteFunctionDataset">Clear</button>
                     </div>
                 </div>
@@ -137,7 +137,7 @@
                     
 
                     <div class="row-sm justify-content-center">
-                        <button class="btn btn-success btn-xs m-1" id="plotFunctionButton" @click="plotFunc(trigonometric)">Plot</button>
+                        <button class="btn btn-success btn-xs m-1" id="plotFunctionButton" @click="plotFunc(trigonometric); (this.func_a != 0 && this.func_b != 0) ? plottingAchievement('plot-trig'):''">Plot</button>
                         <button class="btn btn-danger btn-xs m-1" id="clearFunctionButton" @click="deleteFunctionDataset">Clear</button>
                     </div>
                 </div>
@@ -168,7 +168,7 @@
                     </div>
 
                     <div class="row-sm justify-content-center">
-                        <button class="btn btn-success btn-xs m-1" id="plotFunctionButton" @click="plotFunc(exponential)">Plot</button>
+                        <button class="btn btn-success btn-xs m-1" id="plotFunctionButton" @click="plotFunc(exponential); (this.func_a != 0 && this.func_b != 0) ? plottingAchievement('plot-exp'):''">Plot</button>
                         <button class="btn btn-danger btn-xs m-1" id="clearFunctionButton" @click="deleteFunctionDataset">Clear</button>
                     </div>
                 </div>
@@ -217,7 +217,7 @@
                     </div>
             
                     <div class="row-sm justify-content-center">
-                        <button class="btn btn-success btn-xs m-1" id="plotFunctionButton" @click="plotFunc(step); (this.func_a != 0 && this.func_b != 0 && this.func_c != 0) ? this.$store.dispatch('setAchievementCompleted', 'plot-1st-step'):''">Plot</button>
+                        <button class="btn btn-success btn-xs m-1" id="plotFunctionButton" @click="plotFunc(step); (this.func_a != 0 && this.func_b != 0 && this.func_c != 0) ? plottingAchievement('plot-1st-step'):''">Plot</button>
                         <button class="btn btn-danger btn-xs m-1" id="clearFunctionButton" @click="deleteFunctionDataset">Clear</button>
                     </div>
                     
@@ -267,7 +267,7 @@
                     </div>
                 
                     <div class="row-sm justify-content-center">
-                        <button class="btn btn-success btn-xs m-1" id="plotFunctionButton" @click="plotFunc(step2nd); (this.func_a != 0 && this.func_b != 0 && this.func_c != 0) ? this.$store.dispatch('setAchievementCompleted', 'plot-2nd-step'):''">Plot</button>
+                        <button class="btn btn-success btn-xs m-1" id="plotFunctionButton" @click="plotFunc(step2nd); (this.func_a != 0 && this.func_b != 0 && this.func_c != 0) ? plottingAchievement('plot-2nd-step'):''">Plot</button>
                         <button class="btn btn-danger btn-xs m-1" id="clearFunctionButton" @click="deleteFunctionDataset">Clear</button>
                     </div>
                     
@@ -318,7 +318,7 @@
 
 
                     <div class="row-sm justify-content-center">
-                        <button class="btn btn-success btn-xs m-1" id="plotFunctionButton" @click="plotFunc(ramp)">Plot</button>
+                        <button class="btn btn-success btn-xs m-1" id="plotFunctionButton" @click="plotFunc(ramp); (this.func_a != 0 && this.func_b != 0 && this.func_c != 0 && this.func_d != 0) ? plottingAchievement('plot-ramp'):''">Plot</button>
                         <button class="btn btn-danger btn-xs m-1" id="clearFunctionButton" @click="deleteFunctionDataset">Clear</button>
                     </div>
                 </div>
@@ -831,6 +831,9 @@ export default {
             this.chart.data.datasets = this.chart.data.datasets.filter(set => set.label !== "plotted function");
             this.chart.update(0);
         },
+        plottingAchievement(achievement){
+            this.$store.dispatch('setFractionalAchievementCompleted', {name:'plot-functions', fractional:achievement});
+        }
 
       },
       
