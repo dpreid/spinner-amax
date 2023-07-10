@@ -689,6 +689,10 @@ export default {
         },
         endDrag(){
             this.mouseDragging = false;
+            if(this.getNumData > 1){
+                this.$store.dispatch('setAchievementCompleted', 'draw-gradient');
+            }
+            
         },
         endLine(event){
             if(this.mouseDragging){

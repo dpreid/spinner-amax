@@ -139,10 +139,15 @@ export default {
         checkVoltageAchievements(){
             this.$store.dispatch('setAchievementCompleted', 'speedRaw-step-input');
             this.$store.dispatch('setFractionalAchievementCompleted', {name:'step-inputs', fractional:'voltage-step'});
-
+            if(this.step_size < 0){
+                this.$store.dispatch('setAchievementCompleted', 'reverse-step');
+            }
         },
         checkSpeedAchievements(){
             this.$store.dispatch('setFractionalAchievementCompleted', {name:'step-inputs', fractional:'speed-step'});
+            if(this.step_size < 0){
+                this.$store.dispatch('setAchievementCompleted', 'reverse-step');
+            }
             
         },
         checkPositionAchievements(){

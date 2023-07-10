@@ -102,6 +102,7 @@ export default {
       } else if(this.getNumData == this.getMaxDataPoints && !this.stopped_recording){
           this.stopRecording();
           this.stopped_recording = true;
+          this.$store.dispatch('setAchievementCompleted', 'data-max');
       }
     },
   },

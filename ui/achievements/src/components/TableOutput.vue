@@ -72,6 +72,7 @@ export default {
         },
         selected_point(id){
             this.changeSelected(id);
+            this.$store.dispatch('setAchievementCompleted', 'data-select');
         }
     },
     methods: {

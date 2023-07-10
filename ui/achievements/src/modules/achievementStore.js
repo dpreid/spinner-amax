@@ -45,8 +45,6 @@ const achievementStore = {
 
             ], required: 3, n: 0}, 
             
-            
-
             {name:'open-all', verbose:'Opened all the components', completed: false, hidden: true, fractional: [
                 {name:'graph', completed: false},
                 {name:'snapshot', completed: false},
@@ -59,6 +57,20 @@ const achievementStore = {
             {name:'multiple-runs', verbose:'Run a step or ramp 10 times', completed: false, hidden: true, required: 10, n: 0}, 
             
             {name:'hardware-error', verbose:'Caused the hardware to go out of limits!', completed: false, hidden: true},
+
+            {name:'data-max', verbose:'Record the max number of data points', completed: false, hidden: true},
+
+            {name:'reverse-step', verbose:'Set a negative voltage or speed step', completed: false, hidden: true},
+
+            {name:'update-layout', verbose:'Change the UI layout', completed: false, hidden: true},
+
+            {name:'data-select', verbose:'Jump to table data point from graph', completed: false, hidden: true},
+
+            {name:'draw-gradient', verbose:'Measure the gradient on the graph', completed: false, hidden: true},
+
+            {name:'download-image', verbose:'Download an image from the UI', completed: false, hidden: true},
+
+            
 
         ],
         new_achievement_update: false,

@@ -50,6 +50,8 @@ export default {
             link.href = image;
             link.click();
             link.remove();
+
+            this.$store.dispatch('setAchievementCompleted', 'download-image');
         }
       
   }

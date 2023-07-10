@@ -161,6 +161,7 @@ export default {
         if(ratio == 0.25)
         {
           this.$emit('togglelayout', 0.25);
+          this.$store.dispatch('setAchievementCompleted', 'update-layout');
         }
         else if(ratio == 0.5)
         {
@@ -169,10 +170,12 @@ export default {
         else if(ratio == 0.75)
         {
           this.$emit('togglelayout', 0.75);
+          this.$store.dispatch('setAchievementCompleted', 'update-layout');
         }
         else 
         {
           this.$emit('togglelayout', 1);
+          this.$store.dispatch('setAchievementCompleted', 'update-layout');
         }
       }
   }
