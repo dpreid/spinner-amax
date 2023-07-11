@@ -81,7 +81,7 @@
                 <div v-else-if="!item.hidden" class='form-check'>
                     <label :for="item.name" class="form-label">{{item.verbose}}</label>
                     <input class="form-check-input" type="checkbox" value="" :id="item.name" :checked='item.completed' disabled>
-                    <label v-if='"n" in item' :for="item.name" class="form-label"> {{ item.n}}/{{item.required}}</label>
+                    <label v-if='"n" in item' :for="item.name" class="form-label"> &nbsp; {{ item.n}}/{{item.required}}</label>
                 </div>
                 <div v-else class='form-check'>
                     <label :for="item.name" class="form-label">Achievement Hidden &nbsp;</label>

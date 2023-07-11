@@ -407,8 +407,11 @@ export default {
         
       },
       loadAchievements(){
-        if(this.getUsesLocalStorage && window.localStorage.getItem('achievementsSpinningDisk')){
-          let data = window.localStorage.getItem('achievementsSpinningDisk');
+        let course = this.getCourse;
+        let exp = this.getExperiment;
+        const item = `achievements-${exp}-${course}`
+        if(this.getUsesLocalStorage && window.localStorage.getItem(item)){
+          let data = window.localStorage.getItem(item);
           data = JSON.parse(data);
           this.$store.dispatch('loadAchievements', data);
         }
@@ -451,8 +454,11 @@ export default {
       //   window.localStorage.setItem('loggingSpinningDisk', data_json);
       // },
       saveAchievements(){
+        let course = this.getCourse;
+        let exp = this.getExperiment;
+        const item = `achievements-${exp}-${course}`
         let data_json = JSON.stringify(this.$store.getters.getAchievements);
-        window.localStorage.setItem('achievementsSpinningDisk', data_json);
+        window.localStorage.setItem(item, data_json);
       },
       //need to check on App mount that a UUID exists already or create a new one - this UUID is used in logging and rasa conversations
       updateUUID(){

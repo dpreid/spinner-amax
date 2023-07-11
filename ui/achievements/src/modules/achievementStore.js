@@ -4,18 +4,18 @@
 const achievementStore = {
     state: () => ({
         achievements: [
-            {name:'custom-ui', verbose:'Customise the UI', completed: false, hidden: true},
+            {name:'custom-ui', verbose:'Customise the UI', completed: false, hidden: false},
 
             {name:'speedRaw-step-input', verbose:'Step input whilst in open loop mode', completed: false, hidden: false},
 
-            {name:'step-inputs', verbose:'Run a step input in each mode', completed: false, hidden: true, fractional: [
+            {name:'step-inputs', verbose:'Run a step input in each mode', completed: false, hidden: false, fractional: [
                 {name:'voltage-step', completed: false},
                 {name:'position-step', completed: false},
                 {name:'speed-step', completed: false},
 
             ], required: 3, n: 0}, 
 
-            {name:'ramp-inputs', verbose:'Run a ramp input in each mode', completed: false, hidden: true, fractional: [
+            {name:'ramp-inputs', verbose:'Run a ramp input in each mode', completed: false, hidden: false, fractional: [
                 {name:'voltage-ramp', completed: false},
                 {name:'position-ramp', completed: false},
                 {name:'speed-ramp', completed: false},
@@ -24,7 +24,7 @@ const achievementStore = {
 
             {name:'p-controller', verbose:'Used a non-unity proportional controller in position, step mode', completed: false, hidden: false},
 
-            {name:'all-controllers', verbose:'Run four controller types in position mode', completed: false, hidden: true, fractional: [
+            {name:'all-controllers', verbose:'Run four controller types in position mode', completed: false, hidden: false, fractional: [
                 {name:'p-controller', completed: false},
                 {name:'pi-controller', completed: false},
                 {name:'pd-controller', completed: false},
@@ -34,7 +34,7 @@ const achievementStore = {
 
             {name:'download-data', verbose:'Downloaded a dataset with n > 100 data points', completed: false, hidden: false},
 
-            {name:'plot-functions', verbose:'Plot 3 different functions', completed: false, hidden: true, fractional: [
+            {name:'plot-functions', verbose:'Plot 3 different functions', completed: false, hidden: false, fractional: [
                 {name:'plot-linear', completed: false},
                 {name:'plot-1st-step', completed: false},
                 {name:'plot-2nd-step', completed: false},
@@ -45,7 +45,7 @@ const achievementStore = {
 
             ], required: 3, n: 0}, 
             
-            {name:'open-all', verbose:'Opened all the components', completed: false, hidden: true, fractional: [
+            {name:'open-all', verbose:'Opened all the components', completed: false, hidden: false, fractional: [
                 {name:'graph', completed: false},
                 {name:'snapshot', completed: false},
                 {name:'table', completed: false},
@@ -54,21 +54,21 @@ const achievementStore = {
 
             ], required: 5, n: 0}, 
 
-            {name:'multiple-runs', verbose:'Run a step or ramp 10 times', completed: false, hidden: true, required: 10, n: 0}, 
+            {name:'multiple-runs', verbose:'Run a step or ramp 10 times', completed: false, hidden: false, required: 10, n: 0}, 
             
-            {name:'hardware-error', verbose:'Caused the hardware to go out of limits!', completed: false, hidden: true},
+            {name:'hardware-error', verbose:'Caused the hardware to go out of limits!', completed: false, hidden: false},
 
-            {name:'data-max', verbose:'Record the max number of data points', completed: false, hidden: true},
+            {name:'data-max', verbose:'Record the max number of data points', completed: false, hidden: false},
 
-            {name:'reverse-step', verbose:'Set a negative voltage or speed step', completed: false, hidden: true},
+            {name:'reverse-step', verbose:'Set a negative voltage or speed step', completed: false, hidden: false},
 
-            {name:'update-layout', verbose:'Change the UI layout', completed: false, hidden: true},
+            {name:'update-layout', verbose:'Change the UI layout', completed: false, hidden: false},
 
-            {name:'data-select', verbose:'Jump to table data point from graph', completed: false, hidden: true},
+            {name:'data-select', verbose:'Jump to table data point from graph', completed: false, hidden: false},
 
-            {name:'draw-gradient', verbose:'Measure the gradient on the graph', completed: false, hidden: true},
+            {name:'draw-gradient', verbose:'Measure the gradient on the graph', completed: false, hidden: false},
 
-            {name:'download-image', verbose:'Download an image from the UI', completed: false, hidden: true},
+            {name:'download-image', verbose:'Download an image from the UI', completed: false, hidden: false},
 
             
 
