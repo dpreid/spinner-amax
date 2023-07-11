@@ -132,7 +132,7 @@ export default {
             } else if(frac >= 0.75){
                 return 'silver';
             } else if(frac >= 0.5){
-                return 'chocolate';
+                return 'orange';
             } else {
                 return 'dark';
             }
