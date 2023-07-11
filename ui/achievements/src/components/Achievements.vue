@@ -72,7 +72,11 @@ export default {
     name: 'Achievements',
     data () {
         return {
-        
+            //BADGES for 3 groups of achievements
+            hardware_investigator: ['speedRaw-step-input', 'step-inputs', 'ramp-inputs', 'p-controller',
+                                    'all-controllers', 'multiple-runs', 'hardware-error', 'reverse-step'],
+            data_analyst: ['download-data', 'plot-functions','data-max', 'data-select', 'draw-gradient'],
+            ui_explorer: ['custom-ui', 'open-all', 'update-layout', 'download-image']
         }
     },
     computed:{
@@ -101,6 +105,29 @@ export default {
                 return 'dark';
             }
             
+        },hardwareInvestigatorComplete(){
+            for(let i=0;i<this.hardware_investigator.length;i++){
+                if(!this.getAchievementByName(this.hardware_investigator[i]).completed){
+                    return false;
+                }
+            }
+            return true;
+        },
+        dataAnalystComplete(){
+            for(let i=0;i<this.data_analyst.length;i++){
+                if(!this.getAchievementByName(this.data_analyst[i]).completed){
+                    return false;
+                }
+            }
+            return true;
+        },
+        uiExplorerComplete(){
+            for(let i=0;i<this.ui_explorer.length;i++){
+                if(!this.getAchievementByName(this.ui_explorer[i]).completed){
+                    return false;
+                }
+            }
+            return true;
         }
     },
     watch:{
