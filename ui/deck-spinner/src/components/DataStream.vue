@@ -16,7 +16,7 @@ import { mapGetters } from 'vuex';
 export default {
 	name: "DataStream",
 	components:{
-        ControlPanelSpinningDisk,
+        ControlPanelDJDeck,
 	},
     data(){
         return{

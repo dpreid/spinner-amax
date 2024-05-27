@@ -46,43 +46,17 @@
 	<div id="buttons">
 		<div class='row'>
 			<div class='d-grid gap-1 d-md-block mb-1'>
-				<button v-if='getCurrentMode == "stopped"' id="dcmotor" class="button-lg button-primary me-1" aria-label="voltage mode" @click="speedRaw">Voltage (open loop)</button>
 				<button v-if='getCurrentMode == "stopped"' id="pidposition" class="button-lg button-secondary me-1" aria-label="position mode" @click="positionPid">Position (PID)</button>
-				<button v-if='getCurrentMode == "stopped"' id="pidspeed" class="button-lg button-tertiary me-1" aria-label="speed mode" @click="speedPid">Velocity (PID)</button>
 				<button id="stop" v-if='getCurrentMode != "stopped"' class="button-lg button-danger" aria-label="exit mode" @click="stop">Exit mode</button>
 			</div>
 		</div>
 
-		<div class='row d-flex justify-content-center'>
-			<div class='col-auto'>
-				<div class='input-group' v-if='getCurrentMode != "stopped"'>
-					<span class="input-group-text" for="inputSelect">Input type</span>
-					<select class="form-select form-select-sm" name="inputSelect" id="inputSelect" v-model="inputMode" :disabled='!showInputType'>
-						<option v-if='getCurrentMode == "speedRaw"' value="free">Free</option>
-						<option value="step">Step</option>
-						<option value="ramp">Ramp</option>
-					</select> 
-				</div>
-			</div>
-		</div>
 
 	</div>
 
-<div v-if='getCurrentMode == "positionPid" || getCurrentMode == "speedPid" || getCurrentMode == "speedRaw"'>
+<div v-if='getCurrentMode == "positionPid"'>
 
-	<div v-if='inputMode == "free"'>
-		<div v-if='getCurrentMode == "speedRaw"'>
-			<DCMotorPanel v-bind:dataSocket="getDataSocket" :maxV="6" />
-		</div>
-	</div>
-
-	<div v-else-if="inputMode == 'step'">
-		<StepCommand v-bind:mode='getCurrentMode' @showinputtype="toggleInputType"/>
-	</div>
-
-	<div v-else-if="inputMode == 'ramp'">
-		<RampCommand v-bind:mode='getCurrentMode' @showinputtype="toggleInputType"/>
-	</div>
+		<d-j-command @addToSmoothie="addDeckAngle"/>
 
 </div>
 	
@@ -143,22 +117,19 @@
 
 import { SmoothieChart } from 'smoothie';
 import { TimeSeries } from 'smoothie';
-import DCMotorPanel from './DCMotorPanel.vue';
-import StepCommand from './StepCommand.vue';
-import RampCommand from './RampCommand.vue';
+import DJCommand from './DJCommand.vue';
 import { mapActions, mapGetters } from 'vuex';
 import Toolbar from './elements/Toolbar.vue';
+import dayjs from 'dayjs';
 
 export default {
-	name: "ControlPanelSpinningDisk",
+	name: "ControlPanelDJDeck",
 	props:{
 		url: String,
 	},
 	emits:['toggledraggable'],
 	components:{
-		DCMotorPanel,
-		StepCommand,
-		RampCommand,
+		DJCommand,
 		Toolbar,
 	},
     data(){
@@ -184,6 +155,7 @@ export default {
 			smoothie_y_voltmode_abs: 400,
 			smoothie_millis_per_pixel: 10,
 			showInputType: false,				//don't show input types until a mode has been selected
+			series_theta_deck: null,
         }
     },
 	created(){
@@ -365,129 +337,11 @@ export default {
 			this.chart_omega.options.millisPerPixel = this.smoothie_millis_per_pixel;			
 			
 		},
-		// connect(){
-
-		// 	let _store = this.$store;
-		// 	let _this = this;
-
-		// 	this.dataSocket = new WebSocket(this.url);
-			
-		// 	var delay = 0
-		// 	let delay_sum = 0;
-		// 	var messageCount = 0
-		// 	let a;
-		// 	let b;
-		// 	let debug = false;
-		// 	var initialSamplingCount = 1200 // 2 mins at 10Hz, 1200
-		// 	var delayWeightingFactor = 30  // 
-		// 	let responsiveSmoothie = true;
-		// 	let thisTime;
-			
-		// 	var chart_omega = new SmoothieChart({responsive: responsiveSmoothie, millisPerPixel:_this.smoothie_millis_per_pixel,grid:{fillStyle:'#000000'},maxValue:_this.smoothie_y_max_vel,minValue:_this.smoothie_y_min_vel, interpolation:"linear",labels:{fillStyle:'#00ff00',precision:2}});
-		// 	this.canvas_omega = document.getElementById("smoothie-chart_omega");
-		// 	let series_omega = new TimeSeries();
-		// 	chart_omega.addTimeSeries(series_omega, {lineWidth:2,strokeStyle:'#00ff00'});
-		// 	chart_omega.streamTo(this.canvas_omega, 0);
-
-		// 	//smoothie chart for displaying angle data
-		// 	var chart_theta = new SmoothieChart({responsive: responsiveSmoothie, millisPerPixel:_this.smoothie_millis_per_pixel,grid:{fillStyle:'#000000'}, maxValue:_this.smoothie_y_max_pos,minValue:_this.smoothie_y_min_pos, interpolation:"linear",labels:{fillStyle:'#00ff00',precision:2}});
-		// 	this.canvas_theta = document.getElementById("smoothie-chart_theta");
-		// 	let series_theta = new TimeSeries();
-		// 	chart_theta.addTimeSeries(series_theta, {lineWidth:2,strokeStyle:'#00ff00'});
-		// 	chart_theta.streamTo(this.canvas_theta, 0);
-
-		// 	//in order to update the charts
-		// 	_this.chart_omega = chart_omega;
-		// 	_this.chart_theta = chart_theta;
-
-		// 	this.dataSocket.onopen = () => {
-		// 		console.log('data connection opened');
-		// 	};
-
-		// 	this.dataSocket.onmessage = (event) => {
-		// 		try {
-		// 			var obj = JSON.parse(event.data);
-					
-		// 			if(obj.error){
-		// 				this.hasStopped(obj.error);
-		// 			}
-		// 			else if(obj.t){
-		// 				//set values coming from hardware
-		// 				_store.dispatch('setP', obj.p_sig);
-		// 				_store.dispatch('setI', obj.i_sig);
-		// 				_store.dispatch('setD', obj.d_sig);
-		// 				_store.dispatch('setError', obj.e);
-		// 				_store.dispatch('setDrive', obj.y);
-		// 				_store.dispatch('setCommand', obj.c);
-
-		// 				var msgTime = obj.t;
-		// 				msgTime = parseFloat(msgTime);
-		// 				var thisDelay = new Date().getTime() - msgTime;
-					
-		// 				var enc = obj.d;					//rad
-		// 				var enc_ang_vel = obj.v;			//rad/s
-
-		// 				if(messageCount == 0){
-		// 					delay = thisDelay
-		// 					delay_sum += thisDelay;
-		// 				} else{
-		// 					if(!isNaN(thisDelay)){
-		// 						delay_sum += thisDelay;
-		// 						delay = delay_sum / (messageCount + 1);
-		// 					} else{
-		// 						delay_sum += delay;
-		// 						delay = delay_sum / (messageCount + 1);
-								
-		// 					}
-							
-		// 				}
-
-		// 				a = 1 / delayWeightingFactor
-		// 				b = 1 - a
-
-		// 				if (messageCount < initialSamplingCount) {
-		// 					thisDelay = ((delay * messageCount) + thisDelay) / (messageCount + 1)
-		// 				} else {
-		// 					thisDelay = (delay * b) + (thisDelay * a)
-		// 				}
-			
-		// 				messageCount += 1
-		// 				thisTime = msgTime + thisDelay;
-
-		// 				if (!isNaN(thisTime)){
-		// 					let data_received = false;
-		// 					if(!isNaN(enc)){
-		// 						_store.dispatch('setCurrentAngle', enc);			
-		// 						series_theta.append(msgTime + thisDelay, enc);
-		// 						data_received = true;
-		// 					}
-							
-		// 					if(!isNaN(enc_ang_vel)){		
-		// 						_store.dispatch('setCurrentAngularVelocity', enc_ang_vel);
-		// 						series_omega.append(msgTime + thisDelay, enc_ang_vel);	
-		// 						data_received = true;
-		// 					}
-
-		// 					if(data_received){
-		// 						_store.dispatch('setCurrentTime', msgTime + thisDelay);	//testing
-		// 					}
-		// 				}
-		// 			}
-		// 		} catch (e) {
-		// 			if(debug){
-		// 				console.log(e)
-		// 			}
-					
-		// 		}
-		// 	}
-
-		// _store.dispatch('setStartTime', new Date().getTime());
-		// window.addEventListener('keydown', this.hotkey, false);
-		// window.addEventListener('pagehide', this.stop);				//closing window
-		// window.addEventListener('beforeunload', this.stop);			//refreshing page, changing URL
-		
-		
-		// },
+		addDeckAngle(angle){
+			console.log(angle)
+			let time = new Date().getTime()
+			this.series_theta_deck.append(time, angle);
+		},
 		connectWithArrays(){
 
 			let _store = this.$store;
@@ -517,8 +371,11 @@ export default {
 			var chart_theta = new SmoothieChart({responsive: responsiveSmoothie, millisPerPixel:_this.smoothie_millis_per_pixel,grid:{fillStyle:'#eeeeee'}, maxValue:_this.smoothie_y_max_pos,minValue:_this.smoothie_y_min_pos, interpolation:"linear",labels:{fillStyle:'#000000',precision:2}});
 			this.canvas_theta = document.getElementById("smoothie-chart_theta");
 			let series_theta = new TimeSeries();
+			this.series_theta_deck = new TimeSeries();
 			chart_theta.addTimeSeries(series_theta, {lineWidth:2,strokeStyle:'#000000'});
+			chart_theta.addTimeSeries(this.series_theta_deck, {lineWidth:2,strokeStyle:'#000fff'});
 			chart_theta.streamTo(this.canvas_theta, 0);
+			
 
 			//in order to update the charts
 			_this.chart_omega = chart_omega;
